@@ -5,7 +5,7 @@
 # 2013-03-30 Kevin Claytor, Michael Simpson and Chris Pecora
 
 import time
-import lp_driver	# our controller 
+import LpDriver	# our controller 
 import SiPyVal
 
 def set_diff:

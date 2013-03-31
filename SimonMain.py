@@ -9,6 +9,7 @@ import RPi.GPIO as GPIO
 import LpDriver
 import SiPiVal as SPV
 from time import sleep
+import random
 
 # Open the path to the controller data
 pipe = open('/dev/input/js0','r')

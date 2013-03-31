@@ -27,9 +27,27 @@ def onoff_led(PINS,state):
     return 0
 
 def blink_led(LEDPIN,duration):
+    #print "Blinking: " + repr(LEDPIN)
     onoff_led(LEDPIN,1)
     sleep(duration)
     onoff_led(LEDPIN,0)
+    sleep(duration)
+    return 0
+
+def cycle_led(dur):
+    onoff_led([SPV.LEDUP],1)
+    onoff_led([SPV.LEDRT],1)
+    sleep(dur)
+    onoff_led([SPV.LEDUP],0)
+    onoff_led([SPV.LEDDN],1)
+    sleep(dur)
+    onoff_led([SPV.LEDRT],0)
+    onoff_led([SPV.LEDLT],1)
+    sleep(dur)
+    onoff_led([SPV.LEDUP],1)
+    onoff_led([SPV.LEDDN],0)
+    sleep(dur)
+    onoff_led(SPV.LEDALL,0)
     return 0
 
 # Get game mode, TRUE = append to sequence = up arrow
@@ -38,6 +56,9 @@ def get_mode():
     print "Select game mode:"
     print "   ^  = Append"
     print "   \/ = New (Challenge mode)"
+    print "SELECT - Choose"
+    print "START - Continue"
+    print ""
     onoff_led(SPV.UPARROW,1)
     mode = True
     while 1:
@@ -52,14 +73,18 @@ def get_mode():
             mode = not mode
         elif key == SPV.START:
             break
+    onoff_led(SPV.LEDALL,0)
     return mode
         
 def get_diff():
-    print "Select your difficutly:"
+    print "Select your difficutly (#Lights):"
     print " 1 = Easy"
     print " 2 = Hard"
     print " 3 = Harder"
     print " 4 = Hardest"
+    print "SELECT - Change Difficulty"
+    print "START - Continue"
+    print ""
     diff = 1
     onoff_led([SPV.LEDUP],1)
     while 1:
@@ -81,40 +106,41 @@ def get_diff():
                 diff = 1
         elif key == SPV.START:
             break
+    onoff_led(SPV.LEDALL, 0)
     return diff
 
 # Generates a sequence of LED values level long
 def make_sequence(diff, level):
     seq = []
-    for i in xrange(1,level):
+    for i in xrange(0,level):
         seq.append(SPV.LEDALL[random.randint(0,3)])
     return seq
 
 def disp_sequence(diff, seq):
-    duration = .5/diff
+    duration = .4/diff
     for LED in seq:
-        blink_led(LED,duration)
+        blink_led([LED],duration)
     return 0
 
 # Get the user input sequence
 def get_user(level):
     user = []
     # Get the number of keystrokes we need for a level
-    for i in xrange(1,level):
+    for i in xrange(0,level):
         key = LpDriver.get_key(pipe)
         user.append(key)
         # Blink the LED as user feedback
         if key == SPV.LPUP:
-            blink_led([SPV.LEDUP],.5)
+            blink_led([SPV.LEDUP],.1)
         elif key == SPV.LPDN:
-            blink_led([SPV.LEDDN],.5)
+            blink_led([SPV.LEDDN],.1)
         elif key == SPV.LPLT:
-            blink_led([SPV.LEDLT],.5)
+            blink_led([SPV.LEDLT],.1)
         elif key == SPV.LPRT:
-            blink_led([SPV.LEDRT],.5)
+            blink_led([SPV.LEDRT],.1)
         elif key == SPV.START:
             # Little easter egg, the player looses in this case though
-            blink_led(SPV.LEDALL,.5)
+            blink_led(SPV.LEDALL,.2)
     return user
 
 # Compare sequences
@@ -139,31 +165,55 @@ def seq_compare(seq,useq):
             if (user_dir != SPV.LPRT):
                 success = False
                 break
-        return success
+    return success
     
 # ==============================
 # ======= MAIN GAME LOOP =======
 # ==============================
 
+onoff_led(SPV.LEDALL, 0)
 # Select the game mode
+blink_led(SPV.LEDALL,.2)
+cycle_led(.2)
+blink_led(SPV.LEDALL,.2)
 mode = get_mode()
 # First as the user for their difficulty
+blink_led(SPV.LEDALL,.2)
+cycle_led(.2)
+blink_led(SPV.LEDALL,.2)
 diff = get_diff()
 # Set some constants
 success = True
-level = 3
 
 # Now Play a game
-seq = make_sequence(diff, level)	# Get the computer sequence	
+blink_led(SPV.LEDALL,.2)
+cycle_led(.2)
+blink_led(SPV.LEDALL,.2)
+sleep(.5)
+if mode:
+    seq = make_sequence(diff, 3)	# Get the computer sequence
+else:
+    seq = made_sequence(diff, 4)
+level = 4
 while success:
     if mode:
         seq.append(SPV.LEDALL[random.randint(0,3)])
     else:
         seq = make_sequence(diff, level)
+    #print seq
     disp_sequence(diff, seq)		# Display the sequence
-    user = get_user(level)		# Get the user sequence 
+    user = get_user(level)		# Get the user sequence
+    #print user 
     success = seq_compare(seq,user)	# See if they're correct	
+    if success:
+        blink_led(SPV.LEDALL,.2)
+        sleep(.5)
+        print "Hey, good job! Level " + repr(level-3) + " passed!"
+    else:
+        break
     level += 1
-    print "Hey, good job! Level" + repr(level) + " passed!"
 
 print "You Lost! Too Bad, shoulda tried harder!"
+blink_led(SPV.LEDALL,.2)
+cycle_led(.2)
+blink_led(SPV.LEDALL,.2)

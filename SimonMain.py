@@ -33,7 +33,7 @@ def blink_led(LEDPIN,duration):
 
 # Get game mode, TRUE = append to sequence = up arrow
 #                FALSE = new sequence = down arrow
-def get_mode:
+def get_mode():
     onoff_led(SPV.UPARROW,1)
     mode = True
     while 1:
@@ -50,7 +50,7 @@ def get_mode:
             break
     return mode
         
-def get_diff:
+def get_diff():
     diff = 1
     onoff_led(SPV.LEDUP,1)
     while 1:

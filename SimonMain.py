@@ -7,7 +7,7 @@
 
 import RPi.GPIO as GPIO
 import LpDriver
-import SiPyVal as SPV
+import SiPiVal as SPV
 from time import sleep
 
 # Open the path to the controller data
@@ -45,7 +45,7 @@ def get_mode():
             else:
                 onoff_led(SPV.DNARROW,0)
                 onoff_led(SPV.UPARROW,1)
-            mode = !mode
+            mode = not mode
         elif key == SPV.START:
             break
     return mode
@@ -83,7 +83,7 @@ def make_sequence(diff, level):
 
 def disp_sequence(diff, seq):
     duration = .5/diff
-    for LED in seq
+    for LED in seq:
         blink_led(LED,duration)
     return 0
 
@@ -116,28 +116,28 @@ def seq_compare(seq,useq):
         user_dir = useq[i]
         if (led_dir == SPV.LEDUP):
             if (user_dir != SPV.LPUP):
-            success = False
-            break
+                success = False
+                break
         elif (led_dir == SPV.LEDDN):
             if (user_dir != SPV.LPDN):
-            success = False
-            break
+                success = False
+                break
         elif (led_dir == SPV.LEDLT):
             if (user_dir != SPV.LPLT):
-            success = False
-            break
+                success = False
+                break
         elif (led_dir == SPV.LEDRT):
             if (user_dir != SPV.LPRT):
-            success = False
-            break
-    return success
+                success = False
+                break
+        return success
     
 # ==============================
 # ======= MAIN GAME LOOP =======
 # ==============================
 
 # Select the game mode
-mode = get_gamemode()
+mode = get_mode()
 # First as the user for their difficulty
 diff = get_diff()
 # Set some constants

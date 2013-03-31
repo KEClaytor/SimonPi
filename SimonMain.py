@@ -34,6 +34,9 @@ def blink_led(LEDPIN,duration):
 # Get game mode, TRUE = append to sequence = up arrow
 #                FALSE = new sequence = down arrow
 def get_mode():
+    print "Select game mode:"
+    print "   ^  = Append"
+    print "   \/ = New (Challenge mode)"
     onoff_led(SPV.UPARROW,1)
     mode = True
     while 1:
@@ -51,6 +54,11 @@ def get_mode():
     return mode
         
 def get_diff():
+    print "Select your difficutly:"
+    print " 1 = Easy"
+    print " 2 = Hard"
+    print " 3 = Harder"
+    print " 4 = Hardest"
     diff = 1
     onoff_led(SPV.LEDUP,1)
     while 1:

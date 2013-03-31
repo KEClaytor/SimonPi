@@ -60,23 +60,23 @@ def get_diff():
     print " 3 = Harder"
     print " 4 = Hardest"
     diff = 1
-    onoff_led(SPV.LEDUP,1)
+    onoff_led([SPV.LEDUP],1)
     while 1:
         key = LpDriver.get_key(pipe)
         if key == SPV.SELECT:
             if diff == 1:
-                onoff_led(SPV.LEDRT,1)
+                onoff_led([SPV.LEDRT],1)
                 diff += 1
             elif diff == 2:
-                onoff_led(SPV.LEDDN,1)
+                onoff_led([SPV.LEDDN],1)
                 diff += 1
             elif diff == 3:
-                onoff_led(SPV.LEDLT,1)
+                onoff_led([SPV.LEDLT],1)
                 diff += 1
             else:
-                onoff_led(SPV.LEDRT,0)
-                onoff_led(SPV.LEDDN,0)
-                onoff_led(SPV.LEDLT,0)
+                onoff_led([SPV.LEDRT],0)
+                onoff_led([SPV.LEDDN],0)
+                onoff_led([SPV.LEDLT],0)
                 diff = 1
         elif key == SPV.START:
             break
@@ -104,13 +104,13 @@ def get_user(level):
         user.append(key)
         # Blink the LED as user feedback
         if key == SPV.LPUP:
-            blink_led(SPV.LEDUP,.5)
+            blink_led([SPV.LEDUP],.5)
         elif key == SPV.LPDN:
-            blink_led(SPV.LEDDN,.5)
+            blink_led([SPV.LEDDN],.5)
         elif key == SPV.LPLT:
-            blink_led(SPV.LEDLT,.5)
+            blink_led([SPV.LEDLT],.5)
         elif key == SPV.LPRT:
-            blink_led(SPV.LEDRT,.5)
+            blink_led([SPV.LEDRT],.5)
         elif key == SPV.START:
             # Little easter egg, the player looses in this case though
             blink_led(SPV.LEDALL,.5)
@@ -163,6 +163,6 @@ while success:
     user = get_user(level)		# Get the user sequence 
     success = seq_compare(seq,user)	# See if they're correct	
     level += 1
-    print "Hey, good job!"
+    print "Hey, good job! Level" + repr(level) + " passed!"
 
 print "You Lost! Too Bad, shoulda tried harder!"

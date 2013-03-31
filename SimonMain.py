@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # A Simon-says style game loop for the Rasberry Pi
 # Difficulty sets how long the lights blink for
 #   A higher difficutly means shorter lights
@@ -9,7 +10,6 @@ import LpDriver
 import SiPyVal as SPV
 from time import sleep
 
-#!/usr/bin/env python
 # Open the path to the controller data
 pipe = open('/dev/input/js0','r')
 # Initalize Pi GPIO

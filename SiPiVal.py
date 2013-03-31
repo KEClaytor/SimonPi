@@ -1,6 +1,28 @@
 # Constants for SimonPi
 
+# LED Pins
 RED = 17
 BLUE = 22
 GREEN = 24
 ORANGE = 25
+
+# Geometric arrangement
+LEDUP = RED
+LEDLT = BLUE
+LEDRT = GREEN
+LEDDN = ORANGE
+
+# Some cool designs
+LEDALL = [LEDUP,LEDDN,LEDRT,LEDLT]
+DNARROW = [LEDLT,LEDDN,LEDRT]
+UPARROW = [LEDLT,LEDUP,LEDRT]
+LTARROW = [LEDLT,LEDDN,LEDUP]
+RTARROW = [LEDUP,LEDDN,LEDRT]
+
+# Keypad bindings
+SELECT = 9
+START = 10
+LPUP = 4
+LPLT = 3
+LPRT = 2
+LPDN = 1
